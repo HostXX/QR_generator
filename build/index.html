@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="page" style="display:flex; flex-direction: column; align-items: center; ">
+      <h1>Mauro health</h1>
+        <img
+          height="200px"
+          id="qr-image"
+          src="https://media.metrolatam.com/2019/09/22/capturadepantall-6e89eb9ec2d6026b88a7904a63911fc8-1200x800.jpg"
+          alt="qr"
+          srcset=""
+        />
+      <input
+        type="text"
+        id="qr-string"
+        name="qr-string"
+        placeholder="Paste your URL"
+      />
+      <br>
+      <button type="button" onclick="getQrFromInput()">Get qr</button>
+    </div>
+
+    <script>
+      const qrInput = document.querySelector('#qr-string')
+      const qrImage = document.querySelector('#qr-image')
+
+      const getQrFromInput = async () => {
+        try {
+          const rawResponse = await fetch('https://viajesapi.herokuapp.com/api/logs/qr', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ qrString: qrInput.value })
+          })
+          const content = await rawResponse.json()
+          qrImage.src = content.imageQR
+        } catch (error) {
+            console.log(error);
+        }
+      }
+    </script>
+  </body>
+</html>
